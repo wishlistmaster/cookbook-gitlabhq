@@ -14,16 +14,16 @@ template "#{node[:gitlab][:shell][:app_home]}/config.yml" do
   group  node[:gitlab][:group]
   mode   0644
   variables(
-    :git_user         => node[:gitlab][:user],
-    :server_name      => node[:gitlab][:server_name],
-    :https_boolean    => node[:gitlab][:https],
-    :repos_path       => node[:gitlab][:shell][:repos_path],
-    :auth_file        => node[:gitlab][:shell][:auth_file],
-    :redis_binary     => node[:gitlab][:shell][:redis_binary_path],
-    :redis_host       => node[:gitlab][:shell][:redis_host],
-    :redis_port       => node[:gitlab][:shell][:redis_port],
-    :redis_socket     => node[:gitlab][:shell][:redis_socket],
-    :redis_namespace  => node[:gitlab][:shell][:redis_namespace]
+    git_user: node[:gitlab][:user],
+    server_name: node[:gitlab][:server_name],
+    https_boolean: node[:gitlab][:https],
+    repos_path: node[:gitlab][:shell][:repos_path],
+    auth_file: node[:gitlab][:shell][:auth_file],
+    redis_binary: node[:gitlab][:shell][:redis_binary_path],
+    redis_host: node[:gitlab][:shell][:redis_host],
+    redis_port: node[:gitlab][:shell][:redis_port],
+    redis_socket: node[:gitlab][:shell][:redis_socket],
+    redis_namespace: node[:gitlab][:shell][:redis_namespace]
   )
 end
 

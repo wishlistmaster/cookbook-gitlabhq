@@ -4,7 +4,7 @@ include_recipe 'gitlabhq::dependencies'
 user node[:gitlab][:ci][:runner][:user] do
   home     node[:gitlab][:ci][:runner][:home]
   shell    node[:gitlab][:ci][:runner][:user_shell]
-  supports :manage_home => node[:gitlab][:ci][:runner][:user_manage_home]
+  supports manage_home: node[:gitlab][:ci][:runner][:user_manage_home]
   only_if  { node[:gitlab][:ci][:runner][:user_create] === true }
 end
 
@@ -31,22 +31,22 @@ template '/etc/init.d/gitlab_ci_runner' do
   mode   0755
   source 'gitlab_ci_runner.init.erb'
   variables(
-    :app_home    => node[:gitlab][:ci][:runner][:app_home],
-    :app_user    => node[:gitlab][:ci][:runner][:user]
+    app_home: node[:gitlab][:ci][:runner][:app_home],
+    app_user: node[:gitlab][:ci][:runner][:user]
   )
 end
 
 # Start runner on boot
 execute 'gitlab-ci-runner-on-boot' do
-  command "update-rc.d gitlab_ci_runner defaults 21"
+  command 'update-rc.d gitlab_ci_runner defaults 21'
 end
 
 # Install gems with bundle install
 execute 'gitlab-ci-runner-bundle-install' do
-  command "bundle install --deployment"
+  command 'bundle install --deployment'
   cwd     node[:gitlab][:ci][:runner][:app_home]
   user    node[:gitlab][:ci][:runner][:user]
   group   node[:gitlab][:ci][:runner][:group]
-  environment({ 'LANG' => 'en_US.UTF-8', 'LC_ALL' => 'en_US.UTF-8' })
+  environment('LANG' => 'en_US.UTF-8', 'LC_ALL' => 'en_US.UTF-8')
   creates "#{node[:gitlab][:ci][:runner][:app_home]}/vendor/bundle"
 end

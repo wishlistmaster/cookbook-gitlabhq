@@ -21,4 +21,3 @@ include_recipe 'database::mysql'
 
 # Enable secure password generation
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
-

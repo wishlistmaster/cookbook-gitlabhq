@@ -31,5 +31,5 @@ node.default['nginx']['default_site_enabled'] = false
 
 # Register service
 service 'nginx' do
-  supports :status => true, :restart => true, :reload => true
+  supports status: true, restart: true, reload: true
 end

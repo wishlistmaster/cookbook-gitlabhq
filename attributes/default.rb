@@ -92,34 +92,33 @@ default[:gitlab][:ci][:runner][:app_home]         = "#{node[:gitlab][:ci][:home]
 default[:gitlab][:ci][:runner][:marker_dir]       = "#{node[:gitlab][:ci][:home]}/.markers"
 default[:gitlab][:ci][:runner][:url]              = 'https://github.com/gitlabhq/gitlab-ci-runner'
 
-
 # WEBSERVER
 default[:gitlab][:webserver][:type]                = 'nginx'
 default[:gitlab][:webserver][:ssl_certificate]     = "/etc/#{node[:gitlab][:webserver][:type]}/#{node[:fqdn]}.crt"
 default[:gitlab][:webserver][:ssl_certificate_key] = "/etc/#{node[:gitlab][:webserver][:type]}/#{node[:fqdn]}.key"
 default[:gitlab][:webserver][:ssl_req]             = "/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node[:fqdn]}/emailAddress=root@localhost"
 
-# BUILD_ESSENTIAL 
+# BUILD_ESSENTIAL
 default[:build_essential][:compiletime] = true
 
 # GIT
-default[:gitlab][:git][:include_recipe] = "default"
+default[:gitlab][:git][:include_recipe] = 'default'
 case node[:platform]
 when 'ubuntu'
   if node[:platform_version].to_f <= 12.04
-    default[:gitlab][:git][:include_recipe] = "source"
+    default[:gitlab][:git][:include_recipe] = 'source'
   end
 end
 
 # GIT::SOURCE
-default[:git][:prefix] = "/usr/local"
-default[:git][:version] = "1.8.4"
+default[:git][:prefix] = '/usr/local'
+default[:git][:version] = '1.8.4'
 default[:git][:url] = "https://git-core.googlecode.com/files/git-#{node[:git][:version]}.tar.gz"
-default[:git][:checksum] = "ed6dbf91b56c1540627563b5e8683fe726dac881ae028f3f17650b88fcb641d7"
+default[:git][:checksum] = 'ed6dbf91b56c1540627563b5e8683fe726dac881ae028f3f17650b88fcb641d7'
 
 # RUBY
 case node[:platform]
-  when 'redhat','centos','scientific','amazon'
+  when 'redhat', 'centos', 'scientific', 'amazon'
     default[:gitlab][:install_ruby] = '1.9.3-p392'
     default[:gitlab][:ruby_dir]     = "/usr/local/ruby/#{node[:gitlab][:install_ruby]}/bin"
   else
@@ -128,7 +127,7 @@ end
 
 # REQUIRED PACKAGES BASED ON PLATFORM
 case node[:platform]
-when 'ubuntu','debian'
+when 'ubuntu', 'debian'
   default[:gitlab][:packages] = %w{
     zlib1g-dev libgdbm-dev libreadline-dev
     libncurses5-dev libffi-dev libxml2-dev
@@ -138,7 +137,7 @@ when 'ubuntu','debian'
     libicu-dev libc6-dev libyaml-dev python python-dev
     libcurl4-gnutls-dev libexpat1-dev gettext libz-dev
   }
-when 'redhat','centos','amazon','scientific'
+when 'redhat', 'centos', 'amazon', 'scientific'
   case node[:platform_version].to_i
   when 5
     default[:gitlab][:packages] = %w{

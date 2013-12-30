@@ -17,4 +17,3 @@ describe 'gitlabhq::default' do
     end
   end
 end
-

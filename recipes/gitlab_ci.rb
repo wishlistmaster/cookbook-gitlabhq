@@ -12,7 +12,7 @@ end
 user node[:gitlab][:ci][:user] do
   home     node[:gitlab][:ci][:home]
   shell    node[:gitlab][:ci][:user_shell]
-  supports :manage_home => node[:gitlab][:ci][:user_manage_home]
+  supports manage_home: node[:gitlab][:ci][:user_manage_home]
   only_if  { node[:gitlab][:ci][:user_create] === true }
 end
 
@@ -39,24 +39,24 @@ template '/etc/init.d/gitlab_ci' do
   mode   0755
   source 'gitlab_ci.init.erb'
   variables(
-    :app_home         => node[:gitlab][:ci][:app_home],
-    :app_user         => node[:gitlab][:ci][:user],
-    :environment      => node[:gitlab][:ci][:environment],
-    :puma_environment => node[:gitlab][:ci][:puma_environment]
+    app_home: node[:gitlab][:ci][:app_home],
+    app_user: node[:gitlab][:ci][:user],
+    environment: node[:gitlab][:ci][:environment],
+    puma_environment: node[:gitlab][:ci][:puma_environment]
   )
 end
 
 # Register and start service
 service 'gitlab_ci' do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+  supports status: true, restart: true, reload: true
+  action [:enable, :start]
   retries 2
   ignore_failure true
 end
 
 # Start ci on boot
 execute 'gitlab-ci-on-boot' do
-  command "update-rc.d gitlab_ci defaults 21"
+  command 'update-rc.d gitlab_ci defaults 21'
 end
 
 # Render gitlab ci config file
@@ -66,7 +66,7 @@ template "#{node[:gitlab][:ci][:app_home]}/config/application.yml" do
   mode     0644
   source   'gitlab_ci.application.yml.erb'
   variables(
-    :allowed_urls => [node[:gitlab][:ci][:allowed_urls]]
+    allowed_urls: [node[:gitlab][:ci][:allowed_urls]]
   )
   notifies :restart, 'service[gitlab_ci]', :delayed
 end
@@ -78,13 +78,13 @@ template "#{node[:gitlab][:ci][:app_home]}/config/database.yml" do
   group  node[:gitlab][:ci][:group]
   mode   0644
   variables(
-    :adapter  => node[:gitlab][:ci][:database][:adapter],
-    :encoding => node[:gitlab][:ci][:database][:encoding],
-    :host     => node[:gitlab][:ci][:database][:host],
-    :database => node[:gitlab][:ci][:database][:database],
-    :pool     => node[:gitlab][:ci][:database][:pool],
-    :username => node[:gitlab][:ci][:database][:username],
-    :password => node[:gitlab][:ci][:database][:password]
+    adapter: node[:gitlab][:ci][:database][:adapter],
+    encoding: node[:gitlab][:ci][:database][:encoding],
+    host: node[:gitlab][:ci][:database][:host],
+    database: node[:gitlab][:ci][:database][:database],
+    pool: node[:gitlab][:ci][:database][:pool],
+    username: node[:gitlab][:ci][:database][:username],
+    password: node[:gitlab][:ci][:database][:password]
   )
   notifies :restart, 'service[gitlab_ci]', :delayed
 end
@@ -118,7 +118,7 @@ execute 'gitlab-ci-bundle-install' do
   cwd     node[:gitlab][:ci][:app_home]
   user    node[:gitlab][:ci][:user]
   group   node[:gitlab][:ci][:group]
-  environment({ 'LANG' => 'en_US.UTF-8', 'LC_ALL' => 'en_US.UTF-8' })
+  environment('LANG' => 'en_US.UTF-8', 'LC_ALL' => 'en_US.UTF-8')
   creates "#{node[:gitlab][:ci][:marker_dir]}/.gitlab-ci-setup-#{node[:gitlab][:ci][:environment]}"
 end
 
@@ -143,15 +143,15 @@ end
 
 # Render puma template
 template  "#{node[:gitlab][:ci][:app_home]}/config/puma.rb" do
-  source "gitlab_ci.puma.rb.erb"
+  source 'gitlab_ci.puma.rb.erb'
   owner   node[:gitlab][:ci][:user]
   group   node[:gitlab][:ci][:group]
   mode    0644
   variables(
-    :fqdn        => node[:gitlab][:ci][:server_name],
-    :app_name    => 'gitlab-ci',
-    :app_home    => node[:gitlab][:ci][:app_home],
-    :environment => node[:gitlab][:ci][:puma_environment]
+    fqdn: node[:gitlab][:ci][:server_name],
+    app_name: 'gitlab-ci',
+    app_home: node[:gitlab][:ci][:app_home],
+    environment: node[:gitlab][:ci][:puma_environment]
   )
   notifies :restart, 'service[gitlab_ci]', :delayed
 end

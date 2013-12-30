@@ -12,7 +12,7 @@ template '/opt/backup/config.rb' do
 end
 
 # Install packages that backup gem depends on
-[ 'libxml2-dev', 'libxslt1-dev' ].each do |pkg|
+['libxml2-dev', 'libxslt1-dev'].each do |pkg|
   package pkg
 end
 
@@ -38,7 +38,7 @@ backup_generate_model 'gitlab_repos' do
   description 'backup of gitlab repositories'
   backup_type 'archive'
   split_into_chunks_of 250
-  store_with({
+  store_with(
     'engine' => 'S3',
     'settings' => {
       's3.region'            => node[:gitlab][:backup][:remote][:aws_s3][:region],
@@ -46,23 +46,23 @@ backup_generate_model 'gitlab_repos' do
       's3.path'              => node[:gitlab][:backup][:remote][:aws_s3][:path] + node.name,
       's3.keep'              => node[:gitlab][:backup][:remote][:aws_s3][:keep],
       's3.access_key_id'     => aws_credentials[:backup][:access_key_id],
-      's3.secret_access_key' => aws_credentials[:backup][:secret_access_key]}
-  })
-  options({
+      's3.secret_access_key' => aws_credentials[:backup][:secret_access_key] }
+  )
+  options(
     'add' => [node[:gitlab][:repos_path]]
-  })
+  )
   action :backup
 end
 
 database_options = {
-  "db.name"     => node[:gitlab][:database][:database],
-  "db.username" => node[:gitlab][:database][:username],
-  "db.password" => node[:gitlab][:database][:password],
-  "db.host"     => node[:gitlab][:database][:host],
-  "db.port"     => node[:gitlab][:database][:port],
+  'db.name'     => node[:gitlab][:database][:database],
+  'db.username' => node[:gitlab][:database][:username],
+  'db.password' => node[:gitlab][:database][:password],
+  'db.host'     => node[:gitlab][:database][:host],
+  'db.port'     => node[:gitlab][:database][:port],
 }
 
-database_options = database_options.each { |k,v| database_options.delete(k) if v.nil? || v.empty? }
+database_options = database_options.each { |k, v| database_options.delete(k) if v.nil? || v.empty? }
 
 # Create a Backup Gem Model for database
 backup_generate_model 'gitlab_database' do
@@ -70,7 +70,7 @@ backup_generate_model 'gitlab_database' do
   backup_type 'database'
   database_type node[:gitlab][:database][:type] == 'mysql' ? 'MySQL' : 'PostgreSQL'
   split_into_chunks_of 250
-  store_with({
+  store_with(
     'engine' => 'S3',
     'settings' => {
       's3.region'            => node[:gitlab][:backup][:remote][:aws_s3][:region],
@@ -78,8 +78,8 @@ backup_generate_model 'gitlab_database' do
       's3.path'              => "#{node[:gitlab][:backup][:remote][:aws_s3][:path]}/node.name",
       's3.keep'              => node[:gitlab][:backup][:remote][:aws_s3][:keep],
       's3.access_key_id'     => aws_credentials[:backup][:access_key_id],
-      's3.secret_access_key' => aws_credentials[:backup][:secret_access_key]}
-  })
+      's3.secret_access_key' => aws_credentials[:backup][:secret_access_key] }
+  )
   options database_options
   action :backup
 end

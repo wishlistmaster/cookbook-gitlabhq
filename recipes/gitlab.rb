@@ -12,7 +12,7 @@ end
 user node[:gitlab][:user] do
   home     node[:gitlab][:home]
   shell    node[:gitlab][:user_shell]
-  supports :manage_home => node[:gitlab][:user_manage_home]
+  supports manage_home: node[:gitlab][:user_manage_home]
   only_if  { node[:gitlab][:user_create] === true }
 end
 
@@ -64,41 +64,41 @@ template '/etc/init.d/gitlab' do
   mode   0755
   source 'gitlab.init.erb'
   variables(
-    :app_home    => node[:gitlab][:app_home],
-    :app_user    => node[:gitlab][:user],
-    :environment => node[:gitlab][:environment]
+    app_home: node[:gitlab][:app_home],
+    app_user: node[:gitlab][:user],
+    environment: node[:gitlab][:environment]
   )
 end
 
 # Register gitlab service
 service 'gitlab' do
-  supports :status => true, :restart => true, :reload => true
+  supports status: true, restart: true, reload: true
 end
 
 # Start gitlab on boot
 execute 'gitlab-on-boot' do
-  command "update-rc.d gitlab defaults 21"
+  command 'update-rc.d gitlab defaults 21'
 end
 
 # Render gitlab config file
 template "#{node[:gitlab][:app_home]}/config/gitlab.yml" do
-  source "gitlab.yml.erb"
+  source 'gitlab.yml.erb'
   owner  node[:gitlab][:user]
   group  node[:gitlab][:group]
   mode   0644
   variables(
-    :fqdn              => node[:gitlab][:server_name],
-    :https_boolean     => node[:gitlab][:https],
-    :git_user          => node[:gitlab][:user],
-    :git_bin           => "#{node[:git][:prefix]}/bin/git",
-    :email_from        => node[:gitlab][:email_from],
-    :support_email     => node[:gitlab][:support_email],
-    :satellite_path    => node[:gitlab][:satellite_path],
-    :shell_repos_path  => node[:gitlab][:shell][:repos_path],
-    :shell_hooks_path  => node[:gitlab][:shell][:hooks_path],
-    :shell_ssh_port    => node[:gitlab][:shell][:ssh_port],
-    :backup_path       => node[:gitlab][:backup_path],
-    :backup_keep_time  => node[:gitlab][:backup_keep_time]
+    fqdn: node[:gitlab][:server_name],
+    https_boolean: node[:gitlab][:https],
+    git_user: node[:gitlab][:user],
+    git_bin: "#{node[:git][:prefix]}/bin/git",
+    email_from: node[:gitlab][:email_from],
+    support_email: node[:gitlab][:support_email],
+    satellite_path: node[:gitlab][:satellite_path],
+    shell_repos_path: node[:gitlab][:shell][:repos_path],
+    shell_hooks_path: node[:gitlab][:shell][:hooks_path],
+    shell_ssh_port: node[:gitlab][:shell][:ssh_port],
+    backup_path: node[:gitlab][:backup_path],
+    backup_keep_time: node[:gitlab][:backup_keep_time]
   )
   notifies :restart, 'service[gitlab]', :delayed
 end
@@ -110,13 +110,13 @@ template "#{node[:gitlab][:app_home]}/config/database.yml" do
   group  node[:gitlab][:group]
   mode   0644
   variables(
-    :adapter  => node[:gitlab][:database][:adapter],
-    :encoding => node[:gitlab][:database][:encoding],
-    :host     => node[:gitlab][:database][:host],
-    :database => node[:gitlab][:database][:database],
-    :pool     => node[:gitlab][:database][:pool],
-    :username => node[:gitlab][:database][:username],
-    :password => node[:gitlab][:database][:password]
+    adapter: node[:gitlab][:database][:adapter],
+    encoding: node[:gitlab][:database][:encoding],
+    host: node[:gitlab][:database][:host],
+    database: node[:gitlab][:database][:database],
+    pool: node[:gitlab][:database][:pool],
+    username: node[:gitlab][:database][:username],
+    password: node[:gitlab][:database][:password]
   )
   notifies :restart, 'service[gitlab]', :delayed
 end
@@ -147,12 +147,12 @@ end
 
 # Render gitlab unicorn config file
 template "#{node[:gitlab][:app_home]}/config/unicorn.rb" do
-  source "gitlab.unicorn.rb.erb"
+  source 'gitlab.unicorn.rb.erb'
   owner  node[:gitlab][:user]
   group  node[:gitlab][:group]
   mode   0644
   variables(
-    :app_home => node[:gitlab][:app_home]
+    app_home: node[:gitlab][:app_home]
   )
   notifies :restart, 'service[gitlab]', :delayed
 end
@@ -168,7 +168,7 @@ execute "gitlab-bundle-install-#{node[:gitlab][:environment]}" do
   cwd     node[:gitlab][:app_home]
   user    node[:gitlab][:user]
   group   node[:gitlab][:group]
-  environment({ 'LANG' => 'en_US.UTF-8', 'LC_ALL' => 'en_US.UTF-8' })
+  environment('LANG' => 'en_US.UTF-8', 'LC_ALL' => 'en_US.UTF-8')
   creates "#{node[:gitlab][:marker_dir]}/.gitlab-bundle-#{node[:gitlab][:environment]}"
 end
 
@@ -193,7 +193,7 @@ end
 
 # Render gitconfig into gitlab users home
 template File.join(Dir.home(node[:gitlab][:user]), '.gitconfig') do
-  source "gitlab.gitconfig.erb"
+  source 'gitlab.gitconfig.erb'
   owner  node[:gitlab][:user]
   group  node[:gitlab][:group]
   mode   0644
@@ -211,7 +211,7 @@ end
 
 # Enable and start gitlab service
 service 'gitlab' do
-  action [ :enable, :restart ]
+  action [:enable, :restart]
 end
 
 # Make available through webserver

@@ -12,13 +12,13 @@ database_user = node[:gitlab][:ci][:database][:username]
 database_password = node[:gitlab][:ci][:database][:password]
 database_host = node[:gitlab][:ci][:database][:host]
 database_connection = {
-  :host     => database_host,
-  :username => 'root',
-  :password => node[:mysql][:server_root_password]
+  host: database_host,
+  username: 'root',
+  password: node[:mysql][:server_root_password]
 }
 
 node[:gitlab][:ci][:envs].each do |env|
-  
+
   if env == 'production'
     database = node[:gitlab][:ci][:database][:database]
   else

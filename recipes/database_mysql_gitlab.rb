@@ -12,9 +12,9 @@ database_user = node[:gitlab][:database][:username]
 database_password = node[:gitlab][:database][:password]
 database_host = node[:gitlab][:database][:host]
 database_connection = {
-  :host     => database_host,
-  :username => 'root',
-  :password => node[:mysql][:server_root_password]
+  host: database_host,
+  username: 'root',
+  password: node[:mysql][:server_root_password]
 }
 
 node[:gitlab][:envs].each do |env|

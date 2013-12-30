@@ -13,10 +13,10 @@ database_user = node[:gitlab][:ci][:database][:username]
 database_password = node[:gitlab][:ci][:database][:password]
 database_host = node[:gitlab][:ci][:database][:host]
 database_connection = {
-  :host     => database_host,
-  :port     => '5432',
-  :username => 'postgres',
-  :password => node[:postgresql][:password][:postgres]
+  host: database_host,
+  port: '5432',
+  username: 'postgres',
+  password: node[:postgresql][:password][:postgres]
 }
 
 postgresql_database database do

@@ -51,8 +51,8 @@ describe 'gitlabhq::dependencies' do
       end
     end
 
-    it "should create a symlink for redis-cli" do
-      expect(chef_run_with_converge.link("/usr/bin/redis-cli")).to link_to "/usr/local/bin/redis-cli"
+    it 'should create a symlink for redis-cli' do
+      expect(chef_run_with_converge.link('/usr/bin/redis-cli')).to link_to '/usr/local/bin/redis-cli'
     end
   end
 end

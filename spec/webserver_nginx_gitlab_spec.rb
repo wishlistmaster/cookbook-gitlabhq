@@ -8,11 +8,11 @@ describe 'gitlabhq::webserver_nginx_gitlab' do
     @chef_run_with_converge = @chef_run.converge 'gitlabhq::webserver_nginx_gitlab'
   end
 
-  it "should create an nginx config file for gitlab" do
+  it 'should create an nginx config file for gitlab' do
     expect(@chef_run).to create_file '/etc/nginx/sites-available/gitlab'
   end
 
-  it "should execute nxensite gitlab" do 
-    expect(@chef_run.execute("nxensite gitlab")).to notify("service[nginx]", "reload")
+  it 'should execute nxensite gitlab' do
+    expect(@chef_run.execute('nxensite gitlab')).to notify('service[nginx]', 'reload')
   end
 end
