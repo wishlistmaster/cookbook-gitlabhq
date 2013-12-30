@@ -37,7 +37,7 @@ execute 'gitlab-shell-install' do
 end
 
 # We need to symlink gitlab-shell into the HOME of gitlab user to make sidekiq work if we're installing in non-standard location
-user_shell_app_home = File.join(Dir.home(node[:gitlab][:user]), 'gitlab-shell')
+user_shell_app_home = File.join(node[:gitlab][:home], 'gitlab-shell')
 link user_shell_app_home do
   to      node[:gitlab][:shell][:app_home]
   user    node[:gitlab][:user]

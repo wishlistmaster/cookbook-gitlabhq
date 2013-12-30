@@ -3,8 +3,22 @@
     "gitlabhq": {
       "path": "."
     },
+    "runit": {
+      "locked_version": "1.4.0"
+    },
+    "git": {
+      "locked_version": "2.7.0"
+    },
+    "yum": {
+      "locked_version": "2.4.4"
+    },
     "phantomjs": {
-      "locked_version": "1.0.2"
+      "locked_version": "1.0.3"
+    },
+    "redisio": {
+      "locked_version": "2.1.1",
+      "git": "git://github.com/brianbianco/redisio.git",
+      "ref": "038abf14261b83ef8aed9d4be938ed3545e2bae8"
     },
     "build-essential": {
       "locked_version": "1.4.2"
@@ -13,82 +27,79 @@
       "locked_version": "0.0.3"
     },
     "xml": {
-      "locked_version": "1.1.2"
+      "locked_version": "1.2.0"
     },
     "zlib": {
       "locked_version": "2.0.0"
     },
     "python": {
-      "locked_version": "1.4.0"
-    },
-    "yum": {
-      "locked_version": "2.3.2"
-    },
-    "redisio": {
-      "locked_version": "1.7.0"
-    },
-    "ulimit": {
-      "locked_version": "0.2.0"
+      "locked_version": "1.4.4"
     },
     "ruby_build": {
       "locked_version": "0.8.0"
     },
     "mysql": {
-      "locked_version": "3.0.4"
+      "locked_version": "4.0.14"
     },
     "openssl": {
       "locked_version": "1.1.0"
     },
     "postgresql": {
-      "locked_version": "3.0.4"
+      "locked_version": "3.3.4"
     },
     "apt": {
-      "locked_version": "2.1.1"
+      "locked_version": "2.3.4"
     },
     "database": {
-      "locked_version": "1.4.0"
+      "locked_version": "1.6.0"
     },
     "aws": {
-      "locked_version": "0.101.4"
+      "locked_version": "1.0.0"
     },
     "xfs": {
       "locked_version": "1.1.0"
     },
     "backup": {
-      "locked_version": "0.0.4"
+      "locked_version": "0.3.1"
+    },
+    "cron": {
+      "locked_version": "1.2.8"
     },
     "hostsfile": {
-      "locked_version": "2.0.0"
+      "locked_version": "2.4.2"
     },
     "nginx": {
-      "locked_version": "1.8.0"
+      "locked_version": "2.0.8"
     },
-    "runit": {
-      "locked_version": "1.2.0"
+    "bluepill": {
+      "locked_version": "2.3.1"
+    },
+    "rsyslog": {
+      "locked_version": "1.10.2"
     },
     "ohai": {
       "locked_version": "1.1.12"
     },
-    "git": {
-      "locked_version": "2.6.0"
+    "yumrepo": {
+      "locked_version": "2.1.0"
     },
     "dmg": {
-      "locked_version": "2.0.0"
+      "locked_version": "2.1.2"
     },
     "windows": {
-      "locked_version": "1.10.0"
+      "locked_version": "1.12.4"
     },
     "chef_handler": {
       "locked_version": "1.1.4"
     },
-    "yumrepo": {
-      "locked_version": "2.0.0"
+    "powershell": {
+      "locked_version": "1.1.2"
     },
     "chocolatey": {
       "locked_version": "0.0.5"
     },
-    "powershell": {
-      "locked_version": "1.1.2"
+    "ulimit": {
+      "locked_version": "0.3.2"
     }
   }
 }

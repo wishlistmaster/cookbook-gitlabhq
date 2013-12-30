@@ -10,6 +10,7 @@ end
 
 # Create Gitlab user
 user node[:gitlab][:user] do
+  action   :create
   home     node[:gitlab][:home]
   shell    node[:gitlab][:user_shell]
   supports manage_home: node[:gitlab][:user_manage_home]
@@ -18,6 +19,7 @@ end
 
 # Create directory to store markers in
 directory node[:gitlab][:marker_dir] do
+  action   :create
   owner   node[:gitlab][:user]
   group   node[:gitlab][:group]
   mode    0700
@@ -192,7 +194,7 @@ node[:gitlab][:ci][:envs].each do |env|
 end
 
 # Render gitconfig into gitlab users home
-template File.join(Dir.home(node[:gitlab][:user]), '.gitconfig') do
+template File.join(node[:gitlab][:home], '.gitconfig') do
   source 'gitlab.gitconfig.erb'
   owner  node[:gitlab][:user]
   group  node[:gitlab][:group]

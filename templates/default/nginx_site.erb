@@ -2,7 +2,7 @@
 # do not change this file by hand!
 
 upstream <%= @app_name %> {
-  server unix:<%= @app_home %>/tmp/sockets/<%= @app_name %>.socket;
+  server unix:/<%= @app_home %>/tmp/sockets/<%= @app_name %>.socket;
 }
 
 <% if @https_boolean %>

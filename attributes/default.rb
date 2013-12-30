@@ -1,7 +1,7 @@
 # VERSIONS (only change if you know what you are doing!)
-default[:gitlab][:branch]               = '6-1-stable'
-default[:gitlab][:shell][:branch]       = 'v1.7.1'
-default[:gitlab][:ci][:branch]          = '3-1-stable'
+default[:gitlab][:branch]               = '6-4-stable'
+default[:gitlab][:shell][:branch]       = 'v1.8.0'
+default[:gitlab][:ci][:branch]          = '4-1-stable'
 default[:gitlab][:ci][:runner][:branch] = 'master'
 
 # GITLAB
@@ -112,14 +112,14 @@ end
 
 # GIT::SOURCE
 default[:git][:prefix] = '/usr/local'
-default[:git][:version] = '1.8.4'
+default[:git][:version] = '1.8.5.2'
 default[:git][:url] = "https://git-core.googlecode.com/files/git-#{node[:git][:version]}.tar.gz"
-default[:git][:checksum] = 'ed6dbf91b56c1540627563b5e8683fe726dac881ae028f3f17650b88fcb641d7'
+default[:git][:checksum] = '024694524b8be91fe29afca65bc3a9e40de1322dd5ef2b2c0babb6849c913e8a'
 
 # RUBY
 case node[:platform]
   when 'redhat', 'centos', 'scientific', 'amazon'
-    default[:gitlab][:install_ruby] = '1.9.3-p392'
+    default[:gitlab][:install_ruby] = '1.9.3-p448'
     default[:gitlab][:ruby_dir]     = "/usr/local/ruby/#{node[:gitlab][:install_ruby]}/bin"
   else
     default[:gitlab][:install_ruby] = 'package'

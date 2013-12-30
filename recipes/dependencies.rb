@@ -10,7 +10,7 @@ include_recipe 'gitlabhq::ruby'
   readline
   xml
   zlib
-  redisio::install
+  redisio
   redisio::enable
 }.each do |recipe|
   include_recipe recipe

@@ -1,0 +1,45 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 2048
+    cpus: 4
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+
+suites:
+  - name: gitlab
+    hostname: gitlab
+    driver_config:
+      network:
+      - ['public_network', {ip: '192.168.1.87'}]
+    run_list:
+      - recipe[gitlabhq::gitlab]
+    attributes:
+      redisio:
+        version: '2.8.3'
+      build_essential:
+        compiletime: true
+      phantomjs:
+        version: '1.9.2'
+      mysql:
+        server_root_password: 'rootpass'
+        server_debian_password: 'debpass'
+        server_repl_password: 'replpass'
+      gitlab:
+        url: 'https://github.com/wishlistmaster/gitlabhq'
+        environment: 'production'
+        server_name: '192.168.1.87'
+        hostsfile_entry: ''
+        ci:
+          environment: 'production'
+          server_name: '192.168.1.87'
+          allowed_urls: 'https://192.168.1.87'
+          hostsfile_entry: '' 
+
