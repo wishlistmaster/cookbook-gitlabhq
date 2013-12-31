@@ -28,6 +28,7 @@ end
 }.each do |gempkg|
   gem_package gempkg do
     action     :install
+    options '--no-ri --no-rdoc --force'
   end
 end
 
