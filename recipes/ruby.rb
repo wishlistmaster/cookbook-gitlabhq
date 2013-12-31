@@ -1,6 +1,7 @@
 # There are problems deploying on Redhat provided rubies.
 # We'll use Fletcher Nichol's slick ruby_build cookbook to compile a Ruby.
 if node[:gitlab][:install_ruby] !~ /package/
+  node.default[:gitlab][:ruby_dir] = "/usr/local/ruby/#{node[:gitlab][:install_ruby]}/bin"
   # Include recipe
   include_recipe 'ruby_build'
 
