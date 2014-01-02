@@ -192,7 +192,7 @@ node[:gitlab][:envs].each do |env|
     cwd     node[:gitlab][:app_home]
     user    node[:gitlab][:user]
     group   node[:gitlab][:group]
-    creates File.exists?(file_setup)
+    creates file_setup
     not_if {File.exists?(file_setup) || File.exists?(file_setup_old)}
   end
 
@@ -206,6 +206,7 @@ node[:gitlab][:envs].each do |env|
     cwd     node[:gitlab][:app_home]
     user    node[:gitlab][:user]
     group   node[:gitlab][:group]
+    creates file_migrate
     not_if {File.exists?(file_migrate) || File.exists?(file_migrate_old)}
   end
 
@@ -219,6 +220,7 @@ node[:gitlab][:envs].each do |env|
     cwd     node[:gitlab][:app_home]
     user    node[:gitlab][:user]
     group   node[:gitlab][:group]
+    creates file_seed
     not_if {File.exists?(file_seed) || File.exists?(file_seed_old)}
   end
 
@@ -227,11 +229,12 @@ node[:gitlab][:envs].each do |env|
   file_assets_old = File.join(gitlab['home'], ".gitlab_assets")
   execute "rake assets:precompile" do
     command <<-EOS
-      bundle exec rake assets:precompile RAILS_ENV=#{env} && touch #{file_seed}
+      bundle exec rake assets:precompile RAILS_ENV=#{env} && touch #{file_assets}
     EOS
     cwd     node[:gitlab][:app_home]
     user    node[:gitlab][:user]
     group   node[:gitlab][:group]
+    creates file_assets
     not_if {File.exists?(file_assets) || File.exists?(file_assets_old)}
   end
 
