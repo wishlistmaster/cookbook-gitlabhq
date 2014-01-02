@@ -20,6 +20,11 @@
       "git": "git://github.com/brianbianco/redisio.git",
       "ref": "038abf14261b83ef8aed9d4be938ed3545e2bae8"
     },
+    "ruby_build": {
+      "locked_version": "0.8.2",
+      "git": "git://github.com/kewubenduben/chef-ruby_build.git",
+      "ref": "a1cade45494befb099128a5c80604d077037af35"
+    },
     "build-essential": {
       "locked_version": "1.4.2"
     },
@@ -34,9 +39,6 @@
     },
     "python": {
       "locked_version": "1.4.4"
-    },
-    "ruby_build": {
-      "locked_version": "0.8.0"
     },
     "mysql": {
       "locked_version": "4.0.14"

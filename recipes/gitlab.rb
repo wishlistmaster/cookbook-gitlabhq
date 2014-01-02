@@ -175,22 +175,66 @@ execute "gitlab-bundle-install-#{node[:gitlab][:environment]}" do
 end
 
 # Respect old .gitlab-setup file
-file "#{node[:gitlab][:marker_dir]}/.gitlab-setup-production" do
+file "#{node[:gitlab][:marker_dir]}/.gitlab-setup-#{node[:gitlab][:environment]}" do
   user    node[:gitlab][:user]
   group   node[:gitlab][:group]
   action  :create_if_missing
   only_if  { File.exist?("#{node[:gitlab][:marker_dir]}/.gitlab-setup") }
 end
 
-node[:gitlab][:ci][:envs].each do |env|
-  # Setup database for Gitlab
+node[:gitlab][:envs].each do |env|
+
+  ### gitlab:setup
+  file_setup = File.join(node[:gitlab][:marker_dir], ".gitlab-setup-#{env}")
+  file_setup_old = File.join(node[:gitlab][:marker_dir], ".gitlab_setup")
   execute "gitlab-bundle-rake-#{env}" do
     command "bundle exec rake gitlab:setup RAILS_ENV=#{env} force=yes && touch #{node[:gitlab][:marker_dir]}/.gitlab-setup-#{env}"
     cwd     node[:gitlab][:app_home]
     user    node[:gitlab][:user]
     group   node[:gitlab][:group]
-    creates "#{node[:gitlab][:marker_dir]}/.gitlab-setup-#{env}"
+    creates File.exists?(file_setup)
+    not_if {File.exists?(file_setup) || File.exists?(file_setup_old)}
   end
+
+  ### db:migrate
+  file_migrate = File.join(gitlab['home'], ".gitlab_migrate_#{env}")
+  file_migrate_old = File.join(gitlab['home'], ".gitlab_migrate")
+  execute "rake db:migrate" do
+    command <<-EOS
+      bundle exec rake db:migrate RAILS_ENV=#{env} && touch #{file_migrate}
+    EOS
+    cwd     node[:gitlab][:app_home]
+    user    node[:gitlab][:user]
+    group   node[:gitlab][:group]
+    not_if {File.exists?(file_migrate) || File.exists?(file_migrate_old)}
+  end
+
+  ### db:seed_fu
+  file_seed = File.join(gitlab['home'], ".gitlab_seed_#{env}")
+  file_seed_old = File.join(gitlab['home'], ".gitlab_seed")
+  execute "rake db:seed_fu" do
+    command <<-EOS
+      bundle exec rake db:seed_fu RAILS_ENV=#{env} && touch #{file_seed}
+    EOS
+    cwd     node[:gitlab][:app_home]
+    user    node[:gitlab][:user]
+    group   node[:gitlab][:group]
+    not_if {File.exists?(file_seed) || File.exists?(file_seed_old)}
+  end
+
+  ### assets:precompile
+  file_assets = File.join(gitlab['home'], ".gitlab_assets_#{env}")
+  file_assets_old = File.join(gitlab['home'], ".gitlab_assets")
+  execute "rake assets:precompile" do
+    command <<-EOS
+      bundle exec rake assets:precompile RAILS_ENV=#{env} && touch #{file_seed}
+    EOS
+    cwd     node[:gitlab][:app_home]
+    user    node[:gitlab][:user]
+    group   node[:gitlab][:group]
+    not_if {File.exists?(file_assets) || File.exists?(file_assets_old)}
+  end
+
 end
 
 # Render gitconfig into gitlab users home
