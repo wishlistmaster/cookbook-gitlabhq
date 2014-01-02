@@ -186,7 +186,7 @@ node[:gitlab][:envs].each do |env|
 
   ### gitlab:setup
   file_setup = File.join(node[:gitlab][:marker_dir], ".gitlab-setup-#{env}")
-  file_setup_old = File.join(node[:gitlab][:marker_dir], ".gitlab_setup")
+  file_setup_old = File.join(node[:gitlab][:marker_dir], ".gitlab-setup")
   execute "gitlab-bundle-rake-#{env}" do
     command "bundle exec rake gitlab:setup RAILS_ENV=#{env} force=yes && touch #{node[:gitlab][:marker_dir]}/.gitlab-setup-#{env}"
     cwd     node[:gitlab][:app_home]
@@ -210,20 +210,6 @@ node[:gitlab][:envs].each do |env|
     not_if {File.exists?(file_migrate) || File.exists?(file_migrate_old)}
   end
 
-  ### db:seed_fu
-  file_seed = File.join(node[:gitlab][:marker_dir], ".gitlab_seed_#{env}")
-  file_seed_old = File.join(node[:gitlab][:marker_dir], ".gitlab_seed")
-  execute "rake db:seed_fu" do
-    command <<-EOS
-      bundle exec rake db:seed_fu RAILS_ENV=#{env} && touch #{file_seed}
-    EOS
-    cwd     node[:gitlab][:app_home]
-    user    node[:gitlab][:user]
-    group   node[:gitlab][:group]
-    creates file_seed
-    not_if {File.exists?(file_seed) || File.exists?(file_seed_old)}
-  end
-
   ### assets:precompile
   file_assets = File.join(node[:gitlab][:marker_dir], ".gitlab_assets_#{env}")
   file_assets_old = File.join(node[:gitlab][:marker_dir], ".gitlab_assets")
@@ -236,6 +222,20 @@ node[:gitlab][:envs].each do |env|
     group   node[:gitlab][:group]
     creates file_assets
     not_if {File.exists?(file_assets) || File.exists?(file_assets_old)}
+  end
+
+  ### cache:clear
+  file_cacheclear = File.join(node[:gitlab][:marker_dir], ".gitlab_cacheclear_#{env}")
+  file_cacheclear_old = File.join(node[:gitlab][:marker_dir], ".gitlab_cacheclear")
+  execute "rake cache:clear" do
+    command <<-EOS
+      bundle exec rake cache:clear RAILS_ENV=#{env} && touch #{file_cacheclear}
+    EOS
+    cwd     node[:gitlab][:app_home]
+    user    node[:gitlab][:user]
+    group   node[:gitlab][:group]
+    creates file_cacheclear
+    not_if {File.exists?(file_cacheclear) || File.exists?(file_cacheclear_old)}
   end
 
 end
