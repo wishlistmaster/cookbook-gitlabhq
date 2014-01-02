@@ -197,8 +197,8 @@ node[:gitlab][:envs].each do |env|
   end
 
   ### db:migrate
-  file_migrate = File.join(gitlab['home'], ".gitlab_migrate_#{env}")
-  file_migrate_old = File.join(gitlab['home'], ".gitlab_migrate")
+  file_migrate = File.join(node[:gitlab][:marker_dir], ".gitlab_migrate_#{env}")
+  file_migrate_old = File.join(node[:gitlab][:marker_dir], ".gitlab_migrate")
   execute "rake db:migrate" do
     command <<-EOS
       bundle exec rake db:migrate RAILS_ENV=#{env} && touch #{file_migrate}
@@ -211,8 +211,8 @@ node[:gitlab][:envs].each do |env|
   end
 
   ### db:seed_fu
-  file_seed = File.join(gitlab['home'], ".gitlab_seed_#{env}")
-  file_seed_old = File.join(gitlab['home'], ".gitlab_seed")
+  file_seed = File.join(node[:gitlab][:marker_dir], ".gitlab_seed_#{env}")
+  file_seed_old = File.join(node[:gitlab][:marker_dir], ".gitlab_seed")
   execute "rake db:seed_fu" do
     command <<-EOS
       bundle exec rake db:seed_fu RAILS_ENV=#{env} && touch #{file_seed}
@@ -225,8 +225,8 @@ node[:gitlab][:envs].each do |env|
   end
 
   ### assets:precompile
-  file_assets = File.join(gitlab['home'], ".gitlab_assets_#{env}")
-  file_assets_old = File.join(gitlab['home'], ".gitlab_assets")
+  file_assets = File.join(node[:gitlab][:marker_dir], ".gitlab_assets_#{env}")
+  file_assets_old = File.join(node[:gitlab][:marker_dir], ".gitlab_assets")
   execute "rake assets:precompile" do
     command <<-EOS
       bundle exec rake assets:precompile RAILS_ENV=#{env} && touch #{file_assets}
